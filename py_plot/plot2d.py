@@ -5,11 +5,9 @@ import matplotlib.pyplot as plt
 import itertools
 import numpy as np
 
-from py_other.dict import add_dict_defaults
-
 ################################### preferred plot defaults ###################################
 mpl.rcParams['axes.unicode_minus']=False
-mpl.rc('xtick', labelsize=30) 
+mpl.rc('xtick', labelsize=30)
 mpl.rc('ytick', labelsize=30)
 mpl.rcParams.update({'font.size': 30})
 
@@ -44,22 +42,18 @@ rd = "#e74c3c"
 
 sns.set_palette("colorblind")
 palette = itertools.cycle(sns.color_palette())
-
 ##############################################################################################
-
 
 def plot_contour(Xtest,pXtest,**kwargs):
     fig = kwargs.get('fig',None)
     ax  = kwargs.get('ax',None)
-    
-    #figure and ax
+    # figure and ax
     if fig is None:
         fig = plt.figure()
         fig.set_size_inches(8,6,forward=True)
         rect = [.15,.15,.75,.75] # setting the axis limits in [left, bottom, width, height]
         ax   = fig.add_axes(rect)# the carthesian axis:
-    
-    #arguments for plots
+    # arguments for plots
     testdata  = kwargs.get('testdata',None)
     TestPoint = kwargs.get('TestPoint',None)
     colorbar  = kwargs.get('colorbar',True)
@@ -67,24 +61,22 @@ def plot_contour(Xtest,pXtest,**kwargs):
     shape     = kwargs.get('shape',(default_shape,default_shape))
     axis_lim  = kwargs.get('axis_lim',(np.min(Xtest[:,0]),np.max(Xtest[:,0]),np.min(Xtest[:,1]),np.max(Xtest[:,1])))
     fontsize  = kwargs.get('fontsize',26)
-
     # kwargs passthrough
     kwargs_contourf = kwargs.get('kwargs_contourf',dict())
     kwargs_cbar = kwargs.get('kwargs_cbar',dict())
-    
-    #defaults 
-    add_dict_defaults(kwargs_contourf,{'cmap':'Blues'})
-    add_dict_defaults(kwargs_cbar,{'label':'p(x|z)\n ',
-                                   'fontsize':fontsize,
-                                   'shrink':0.65,
-                                   'extend':'both',
-                                   'cmap':kwargs_contourf['cmap'],
-                                   'ax':ax})
-
+    # defaults
+    kwargs_contourf.setdefault('cmap','Blues')
+    kwargs_cbar.setdefault('label','p(x|z)\n ')
+    kwargs_cbar.setdefault('fontsize',fontsize)
+    kwargs_cbar.setdefault('shrink',0.65)
+    kwargs_cbar.setdefault('extend','both')
+    kwargs_cbar.setdefault('cmap',kwargs_contourf['cmap'])
+    kwargs_cbar.setdefault('ax',ax)
+    # contour plot
     C = ax.contourf(np.reshape(Xtest[:,0],shape),np.reshape(Xtest[:,1],shape),np.reshape(pXtest,shape),
                         kwargs_contourf.pop('v',25),**kwargs_contourf)
     for c in C.collections: c.set_edgecolor("face")
-
+    # colorbar
     if colorbar:
         cbar_label = kwargs_cbar.pop('label')
         cbar_fontsize = kwargs_cbar.pop('fontsize')
@@ -97,7 +89,7 @@ def plot_contour(Xtest,pXtest,**kwargs):
         cbar.ax.set_ylabel(cbar_label,fontsize=cbar_fontsize)
     else:
         cbar = None
-
+    # labels
     ax.axis(axis_lim)
     ax.set_aspect('equal')
     ax.set_xlabel('x[m]',fontsize=26)
