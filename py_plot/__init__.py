@@ -1,1 +1,1 @@
-from plot2d import *
+from .plot2d import *
