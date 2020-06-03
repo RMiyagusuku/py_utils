@@ -307,7 +307,7 @@ class Compute:
             self.paramsets['data'][index]['cdf_x']       = res[8]
             self.paramsets['data'][index]['cdf_error']   = res[9]
             self.paramsets['data'][index]['cdf_std']     = res[10]
-            self.paramsets['data'][index]['cs_metrics']  = res[11]
+            self.paramsets['data'][index]['cdf_metrics']  = res[11]
 
         pool.close()
         pool.join()
